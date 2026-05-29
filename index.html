@@ -124,80 +124,92 @@ body{
 .ornament-layer{
   position:absolute;
 
+  inset:0;
+
   z-index:2;
 
   pointer-events:none;
-
-  opacity:0;
-
-  animation:
-  ornamentFade 12s infinite;
 }
 
 .ornament-layer img{
-  width:100%;
+  position:absolute;
 
   display:block;
+
+  opacity:0.9;
 }
 
-.layer-1{
+/* LAYER 1 */
+
+.layer-1 img{
   width:320px;
 
   top:-40px;
   left:-60px;
 
-  animation-delay:0s;
+  animation:float1 8s ease-in-out infinite;
 }
 
-.layer-2{
+/* LAYER 2 */
+
+.layer-2 img{
   width:260px;
 
   top:120px;
   right:-40px;
 
-  animation-delay:4s;
+  animation:float2 10s ease-in-out infinite;
 }
 
-.layer-3{
+/* LAYER 3 */
+
+.layer-3 img{
   width:220px;
 
   bottom:-40px;
   left:50%;
 
-  transform:
-  translateX(-50%);
+  transform:translateX(-50%);
 
-  animation-delay:8s;
+  animation:float3 9s ease-in-out infinite;
 }
 
-@keyframes ornamentFade{
+/* ANIMATION */
 
-  0%{
-    opacity:0;
+@keyframes float1{
+  0%,100%{
+    transform:translateY(0px);
+  }
 
+  50%{
+    transform:translateY(10px);
+  }
+}
+
+@keyframes float2{
+  0%,100%{
+    transform:translateY(0px);
+  }
+
+  50%{
+    transform:translateY(-12px);
+  }
+}
+
+@keyframes float3{
+  0%,100%{
     transform:
-    translateY(20px)
-    scale(0.95);
+    translateX(-50%)
+    translateY(0px);
   }
 
-  10%{
-    opacity:1;
+  50%{
+    transform:
+    translateX(-50%)
+    translateY(12px);
   }
-
-  30%{
-    opacity:1;
-  }
-
-  40%{
-    opacity:0;
-  }
-
-  100%{
-    opacity:0;
-  }
-
 }
-
+  
 /* =========================
    COVER CARD
 ========================= */
@@ -2666,10 +2678,14 @@ font-family:'Allura', cursive;
 <body>
 <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
 
-<!-- COVER -->
-<section class="cover">
+ <section class="cover">
 
-  <!-- ORNAMENT LAYER -->
+  <div class="cover-bg"></div>
+
+  <div class="overlay"></div>
+
+  <!-- ORNAMENT -->
+
   <div class="ornament-layer layer-1">
     <img src="ornament1.png" alt="">
   </div>
@@ -2681,6 +2697,16 @@ font-family:'Allura', cursive;
   <div class="ornament-layer layer-3">
     <img src="ornament3.png" alt="">
   </div>
+
+  <!-- CONTENT -->
+
+  <div class="cover-content">
+    ...
+  </div>
+
+ </section> 
+<!-- COVER -->
+<section class="cover">
 
   <!-- OVERLAY -->
   <div class="overlay"></div>

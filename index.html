@@ -2674,6 +2674,23 @@ button:hover{
 .cover-title{
   font-family:'Allura', cursive;
 }
+
+  #lightbox{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+}
+
+#lightbox img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:20px;
+}
+  
 </style>
 </head>
 
@@ -3483,7 +3500,10 @@ button:hover{
 
 </audio>
 
-<!-- JS -->
+<div id="lightbox">
+  <img id="lightbox-img">
+</div>
+  
 <script>
   /* ELEMENT */
 
@@ -3610,70 +3630,51 @@ window.addEventListener(
 
 /* COUNTDOWN */
 
-const targetDate =
-new Date(
+const targetDate = new Date(
   "Dec 20, 2026 08:00:00"
 ).getTime();
 
-setInterval(() => {
+const countdown = setInterval(() => {
 
-  const now =
-  new Date().getTime();
+  const now = new Date().getTime();
 
-  if(distance < 0){
-  clearInterval(countdown);
-  return;
-}
+  const distance = targetDate - now;
 
-  /* TIME */
+  if (distance < 0) {
 
-  const days =
-  Math.floor(
-    distance /
-    (1000 * 60 * 60 * 24)
+    clearInterval(countdown);
+
+    document.getElementById("days").innerHTML = "0";
+    document.getElementById("hours").innerHTML = "0";
+    document.getElementById("minutes").innerHTML = "0";
+    document.getElementById("seconds").innerHTML = "0";
+
+    return;
+  }
+
+  const days = Math.floor(
+    distance / (1000 * 60 * 60 * 24)
   );
 
-  const hours =
-  Math.floor(
-    (distance %
-    (1000 * 60 * 60 * 24))
-    /
-    (1000 * 60 * 60)
+  const hours = Math.floor(
+    (distance % (1000 * 60 * 60 * 24))
+    / (1000 * 60 * 60)
   );
 
-  const minutes =
-  Math.floor(
-    (distance %
-    (1000 * 60 * 60))
-    /
-    (1000 * 60)
+  const minutes = Math.floor(
+    (distance % (1000 * 60 * 60))
+    / (1000 * 60)
   );
 
-  const seconds =
-  Math.floor(
-    (distance %
-    (1000 * 60))
-    /
-    1000
+  const seconds = Math.floor(
+    (distance % (1000 * 60))
+    / 1000
   );
 
-  /* INSERT */
-
-  document.getElementById(
-    "days"
-  ).innerHTML = days;
-
-  document.getElementById(
-    "hours"
-  ).innerHTML = hours;
-
-  document.getElementById(
-    "minutes"
-  ).innerHTML = minutes;
-
-  document.getElementById(
-    "seconds"
-  ).innerHTML = seconds;
+  document.getElementById("days").textContent = days;
+  document.getElementById("hours").textContent = hours;
+  document.getElementById("minutes").textContent = minutes;
+  document.getElementById("seconds").textContent = seconds;
 
 }, 1000);
 
@@ -3758,16 +3759,25 @@ music.addEventListener(
 
 /* CLICK */
 
-musicButton.addEventListener(
+openButton.addEventListener(
   "click",
-
   () => {
 
-    if(music.paused){
+    document.querySelector(".cover").style.display = "none";
 
-      music.play().catch(err=>{
-  console.log(err);
-});
+    mainContent.style.display = "block";
+
+    music.play().catch(err => {
+      console.log(err);
+    });
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  }
+);
 
     }else{
 
@@ -3876,11 +3886,19 @@ sendWish.addEventListener(
       "wish-item"
     );
 
-    const h4 = document.createElement("h4");
-h4.textContent = name;
+    /* CARD */
 
-const p = document.createElement("p");
-p.textContent = message;
+const item = document.createElement("div");
+
+item.classList.add("wish-item");
+
+item.innerHTML = `
+  <h4>${name}</h4>
+  <small>${attendance} • ${guestCount || 0} Tamu</small>
+  <p>${message}</p>
+`;
+
+wishList.prepend(item);
 
     /* ADD */
 
@@ -3907,6 +3925,49 @@ p.textContent = message;
   }
 
 );
+
+  const lightbox =
+document.getElementById("lightbox");
+
+const lightboxImg =
+document.getElementById("lightbox-img");
+
+document
+.querySelectorAll(".gallery-item img")
+.forEach(img => {
+
+  img.addEventListener("click", () => {
+
+    lightbox.style.display = "flex";
+
+    lightboxImg.src = img.src;
+
+  });
+
+});
+
+lightbox.addEventListener("click", () => {
+
+  lightbox.style.display = "none";
+
+});
+
+  const params =
+new URLSearchParams(
+  window.location.search
+);
+
+const guest =
+params.get("to");
+
+if(guest){
+
+  document.getElementById(
+    "guestName"
+  ).textContent = guest;
+
+}
+  
 </script>
 
 </body>

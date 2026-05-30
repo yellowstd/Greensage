@@ -2671,7 +2671,9 @@ button:hover{
   }
 
 }
-font-family:'Allura', cursive;
+.cover-title{
+  font-family:'Allura', cursive;
+}
 </style>
 </head>
 
@@ -2703,14 +2705,6 @@ font-family:'Allura', cursive;
   <div class="cover-content">
     ...
   </div>
-
- </section> 
-<!-- COVER -->
-<section class="cover">
-
-  <!-- OVERLAY -->
-  <div class="overlay"></div>
-
   <!-- CARD -->
   <div class="cover-card">
 
@@ -3626,8 +3620,10 @@ setInterval(() => {
   const now =
   new Date().getTime();
 
-  const distance =
-  targetDate - now;
+  if(distance < 0){
+  clearInterval(countdown);
+  return;
+}
 
   /* TIME */
 
@@ -3769,7 +3765,9 @@ musicButton.addEventListener(
 
     if(music.paused){
 
-      music.play();
+      music.play().catch(err=>{
+  console.log(err);
+});
 
     }else{
 
@@ -3878,18 +3876,11 @@ sendWish.addEventListener(
       "wish-item"
     );
 
-    item.innerHTML = `
+    const h4 = document.createElement("h4");
+h4.textContent = name;
 
-      <h4>${name}</h4>
-
-      <small>
-        ${attendance}
-        • ${guestCount} tamu
-      </small>
-
-      <p>${message}</p>
-
-    `;
+const p = document.createElement("p");
+p.textContent = message;
 
     /* ADD */
 
